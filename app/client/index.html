@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Voice Assistant</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <h1>AI Voice Assistant</h1>
+        
+        <div class="connection-status">
+          <p>Status: <span id="status">Disconnected</span></p>
+        </div>
+
+        <div class="mode-selector">
+          <label>
+            <input type="radio" name="mode" value="human" checked />
+            Human to Human
+          </label>
+          <label>
+            <input type="radio" name="mode" value="ai" />
+            Talk with AI
+          </label>
+        </div>
+
+        <div class="language-selector" id="language-selector" style="display: none;">
+          <label>
+            <input type="radio" name="language" value="en-US" checked />
+            English
+          </label>
+          <label>
+            <input type="radio" name="language" value="ja-JP" />
+            日本語
+          </label>
+        </div>
+
+        <div class="controls">
+          <input type="text" id="room-id" placeholder="Enter Room ID" />
+          <button id="call-btn">Start Call</button>
+          <button id="hangup-btn" disabled>Hang Up</button>
+        </div>
+
+        <div id="ai-chat" class="ai-chat" style="display: none;">
+          <div class="chat-messages" id="chat-messages"></div>
+        </div>
+
+        <div class="audio-container">
+          <audio id="remote-audio" autoplay></audio>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

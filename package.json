@@ -1,0 +1,26 @@
+{
+  "name": "webrtc-voice-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @webrtc-voice-app/client dev",
+    "dev:server": "pnpm --filter @webrtc-voice-app/server dev",
+    "dev:all": "pnpm run --parallel dev",
+    "build": "pnpm run --recursive build",
+    "build:client": "pnpm --filter @webrtc-voice-app/client build",
+    "build:server": "pnpm --filter @webrtc-voice-app/server build",
+    "preview": "pnpm --filter @webrtc-voice-app/client preview",
+    "start:server": "pnpm --filter @webrtc-voice-app/server start"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.0"
+  }
+}
