@@ -5,6 +5,8 @@ export class AIClient {
   private roomId: string | null = null;
   private speechClient: SpeechClient;
   private language: string;
+  private speechKey?: string;
+  private speechRegion?: string;
 
   constructor(
     private signalingServerUrl: string,
@@ -51,12 +53,12 @@ export class AIClient {
   }
 
   private async handleMessage(message: any): Promise<void> {
-    console.log('Received message:', message);
-    
     switch (message.type) {
       case 'ai-mode-active':
         // Initialize speech client with credentials
-        await this.speechClient.initialize(message.speechKey, message.speechRegion);
+        this.speechKey = message.speechKey;
+        this.speechRegion = message.speechRegion;
+        await this.speechClient.initialize(this.speechKey!, this.speechRegion!);
         this.onStatusChange('AI Assistant Ready');
         await this.speechClient.startListening();
         break;
@@ -64,8 +66,11 @@ export class AIClient {
       case 'user-speech':
         this.onMessage('user', message.text);
         break;
-        
+          
       case 'ai-response':
+        this.speechClient.dispose();
+        await this.speechClient.initialize(this.speechKey!, this.speechRegion!);
+        await this.speechClient.startListening();
         this.onMessage('ai', message.text);
         // Speak the AI response
         await this.speechClient.speak(message.text);

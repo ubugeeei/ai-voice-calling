@@ -6,6 +6,7 @@ export class SpeechClient {
   private synthesizer?: sdk.SpeechSynthesizer;
   private onTranscript: (text: string) => void;
   private isListening = false;
+  private prevAudio: HTMLAudioElement | null = null;
 
   constructor(onTranscript: (text: string) => void) {
     this.onTranscript = onTranscript;
@@ -88,6 +89,16 @@ export class SpeechClient {
 
   async speak(text: string): Promise<void> {
     if (!this.synthesizer) return;
+    if (this.prevAudio) {
+      this.prevAudio.pause();
+      this.prevAudio = null;
+    }
+
+    // @ts-expect-error
+    if (this.synthesizer.privAdapter.privSessionAudioDestination.privDestination.internalAudio instanceof HTMLAudioElement) {
+      // @ts-expect-error
+      this.prevAudio = this.synthesizer.privAdapter.privSessionAudioDestination.privDestination.internalAudio;
+    }
 
     return new Promise((resolve, reject) => {
       this.synthesizer!.speakTextAsync(
@@ -104,12 +115,13 @@ export class SpeechClient {
         (error) => {
           console.error('Speech synthesis error:', error);
           reject(error);
-        }
+        },
       );
     });
   }
 
   dispose(): void {
+    console.log('Stopping speech synthesis');
     if (this.recognizer) {
       this.recognizer.close();
       this.recognizer = undefined;
